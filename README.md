@@ -1,3 +1,10 @@
+1. topk sample
+
+3. douban数据集评测
+
+
+
+
 # Guyu (谷雨)
 pre-training and fine-tuning framework for text generation
 
@@ -26,16 +33,7 @@ torch>=1.0
 ./train.sh
 ./inference.sh
 ```
-
 #### Fine-tuning
-Example: chat-bot
-
-```
-cd chat_bot
-./prepare_data.sh
-./fine_tune.sh
-./inference.sh
-```
 
 #### Web Api:
 ```
