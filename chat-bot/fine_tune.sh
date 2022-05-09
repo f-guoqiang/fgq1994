@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=0 \
+CUDA_VISIBLE_DEVICES=0,1 \
 python3 -u train.py --embed_dim 768 \
                       --ff_embed_dim 3072 \
                       --num_heads 12 \
@@ -6,7 +6,7 @@ python3 -u train.py --embed_dim 768 \
                       --dropout 0.2 \
                       --train_data ./data/train.txt \
                       --dev_data ./data/dev.txt \
-                      --vocab ../model/12L_10G.vocab.txt \
+                      --vocab ../model/vocab.txt \
                       --min_occur_cnt 0 \
                       --batch_size 16 \
                       --warmup_steps 1 \
@@ -24,7 +24,7 @@ python3 -u train.py --embed_dim 768 \
                       --MASTER_PORT 28512 \
                       --print_every 100 \
                       --save_every 10000 \
-                      --epoch 100 \
+                      --epoch 30 \
                       --save_dir ckpt \
                       --backend nccl \
-                      --start_from ../model/12L_10G.ckpt
+                      --start_from ../model/zh_117M.ckpt

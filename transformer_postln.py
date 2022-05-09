@@ -62,6 +62,7 @@ class TransformerLayer(nn.Module):
     def work_incremental(self, x, self_padding_mask, self_attn_mask, incremental_state):
         # x: seq_len x bsz x embed_dim
         residual = x
+        # 虽然这里只返回了两个，但是incremental_state设置成的是全局变量
         x, self_attn = self.self_attn(query=x, key=x, value=x, key_padding_mask=self_padding_mask, attn_mask=self_attn_mask, incremental_state=incremental_state)
         x = self.attn_layer_norm(residual + x)
 

@@ -14,6 +14,7 @@ mstime = lambda: int(round(time.time() * 1000))
 def init_model(m_path, device, vocab):
     ckpt= torch.load(m_path, map_location='cpu')
     lm_args = ckpt['args']
+    # 指定了一个截断的频率，如果出现次数太小就进行删除
     lm_vocab = Vocab(vocab, min_occur_cnt=lm_args.min_occur_cnt, specials=[])
     lm_model = BIGLM(device, lm_vocab, lm_args.embed_dim, lm_args.ff_embed_dim, lm_args.num_heads, lm_args.dropout, lm_args.layers, 0.1, lm_args.approx)
     lm_model.load_state_dict(ckpt['model'])
@@ -24,7 +25,7 @@ def init_model(m_path, device, vocab):
 @torch.no_grad()
 def top_k_inc(lm_model, lm_vocab, device, s, k, max_len):
     start = time.time()
-    incremental_state = None
+    incremental_state = None # external_attn
     x, m = s2t(s, lm_vocab)
     x = x.to(device)
     res = []

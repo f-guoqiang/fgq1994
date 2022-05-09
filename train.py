@@ -34,11 +34,12 @@ def parse_config():
     parser.add_argument('--min_len', type=int)
     parser.add_argument('--print_every', type=int)
     parser.add_argument('--save_every', type=int)
-    parser.add_argument('--epoch', type=int)
+    parser.add_argument('--epoch',type=int)
     parser.add_argument('--start_from', type=str, default=None)
     parser.add_argument('--save_dir', type=str)
 
     parser.add_argument('--approx', type=str, default='none')
+    # store_true
     parser.add_argument('--fp16', action='store_true')
     parser.add_argument('--world_size', type=int)
     parser.add_argument('--gpus', type=int)
@@ -68,7 +69,7 @@ def average_gradients(model):
 
 def eval_epoch(lm_args, model, lm_vocab, local_rank, label, batch_acm):
     ds = []
-    with open(lm_args.dev_data, "r") as f:
+    with open(lm_args.dev_data, "r",encoding='UTF-8') as f:
         for line in f:
             line = line.strip()
             if line:

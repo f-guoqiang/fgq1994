@@ -47,7 +47,7 @@ class BIGLM(nn.Module):
     
     def label_smotthing_loss(self, y_pred, y, y_mask, avg=True):
         seq_len, bsz = y.size()
-
+        # 将预测，clamp将小于1e-8的值变成1e-8
         y_pred = torch.log(y_pred.clamp(min=1e-8))
         loss = self.smoothing(y_pred.view(seq_len * bsz, -1), y.view(seq_len * bsz, -1))
         if avg:
@@ -113,6 +113,7 @@ class BIGLM(nn.Module):
         if not padding_mask.any():
             padding_mask = None
 
+        # 推理的时候将他设置成None
         if incremental_state is None:
             self_attn_mask = self.attn_mask(seq_len)
             incremental_state = {}
@@ -143,10 +144,10 @@ class BIGLM(nn.Module):
             x, _ ,_ = layer(x, self_padding_mask=padding_mask, self_attn_mask = self_attn_mask)
 
         x = self.one_more_layer_norm(gelu(self.one_more(x)))
+        # out_pro将模型输出的x通过线性层因映射到vocab上
+        # 在vocab维度上softmax
         pred = torch.softmax(self.out_proj(x), -1)
-
         loss = self.label_smotthing_loss(pred, truth, msk)
-        
         _, pred_y = pred.max(-1)
         tot_tokens = msk.float().sum().item()
         acc = (torch.eq(pred_y, truth).float()*msk).sum().item() 

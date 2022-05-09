@@ -43,12 +43,12 @@ def parse_config():
 
     parser.add_argument('--approx', type=str, default='none')
     parser.add_argument('--fp16', action='store_true')
-    parser.add_argument('--world_size', type=int)
-    parser.add_argument('--gpus', type=int)
+    parser.add_argument('--world_size',default=2, type=int)
+    parser.add_argument('--gpus',default=2, type=int)
     parser.add_argument('--MASTER_ADDR', type=str)
     parser.add_argument('--MASTER_PORT', type=str)
     parser.add_argument('--start_rank', type=int)
-    parser.add_argument('--backend', type=str)
+    parser.add_argument('--backend', default='nccl',type=str)
 
     return parser.parse_args()
 
@@ -112,11 +112,14 @@ def run(args, local_rank):
     vocab = Vocab(args.vocab, min_occur_cnt=args.min_occur_cnt, specials=[])
     if (args.world_size == 1 or dist.get_rank() == 0):
         print ("vocab.size = %d"%vocab.size, flush=True)
+
     model = BIGLM(local_rank, vocab, args.embed_dim, args.ff_embed_dim,\
                   args.num_heads, args.dropout, args.layers, args.smoothing, args.approx)
+
     if args.start_from is not None:
         ckpt = torch.load(args.start_from, map_location='cpu')
         model.load_state_dict(ckpt['model'])
+
     model = model.cuda(local_rank)
    
     if args.world_size > 1:
@@ -179,9 +182,11 @@ def init_processes(args, local_rank, fn, backend='nccl'):
 if __name__ == "__main__":
     mp.set_start_method('spawn')
     args = parse_config()
+
     if args.world_size == 1:
         run(args, 0)
         exit(0)
+
     processes = []
     for rank in range(args.gpus):
         p = mp.Process(target=init_processes, args=(args, rank, run, args.backend))
