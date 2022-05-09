@@ -4,27 +4,8 @@
 
 
 
-
-# Guyu (谷雨)
-pre-training and fine-tuning framework for text generation
-
 backbone code for "An Empirical Investigation of Pre-Trained Transformer Language Models for Open-Domain Dialogue Generation": https://arxiv.org/abs/2003.04195
-```
-@article{DBLP:journals/corr/abs-2003-04195,
-  author    = {Piji Li},
-  title     = {An Empirical Investigation of Pre-Trained Transformer Language Models
-               for Open-Domain Dialogue Generation},
-  journal   = {CoRR},
-  volume    = {abs/2003.04195},
-  year      = {2020},
-  url       = {https://arxiv.org/abs/2003.04195},
-  archivePrefix = {arXiv},
-  eprint    = {2003.04195},
-  timestamp = {Tue, 10 Mar 2020 13:33:48 +0100}}
-}
-```
 
-torch>=1.0
 
 #### Pre-training:
 
@@ -51,3 +32,4 @@ torch>=1.0
 #### References:
 - GPT2: https://openai.com/blog/better-language-models/
 - https://github.com/jcyk/BERT
+- https://github.com/lipiji/Guyu
